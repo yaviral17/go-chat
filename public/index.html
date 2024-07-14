@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go WebSocket Chat</title>
+    <style>
+        #chat {
+            list-style: none;
+            padding: 0;
+        }
+        #chat li {
+            padding: 8px;
+            margin-bottom: 10px;
+            background: #f1f1f1;
+        }
+        #message-form {
+            display: flex;
+            flex-direction: column;
+        }
+        #message-form input, #message-form button {
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Go WebSocket Chat</h1>
+    <ul id="chat"></ul>
+    <form id="message-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="text" id="message" placeholder="Message" required>
+        <button type="submit">Send</button>
+    </form>
+    <script>
+        const chat = document.getElementById('chat');
+        const messageForm = document.getElementById('message-form');
+        const usernameInput = document.getElementById('username');
+        const messageInput = document.getElementById('message');
+        
+        const ws = new WebSocket('ws://localhost:8080/ws');
+
+        ws.onmessage = function(event) {
+            const msg = JSON.parse(event.data);
+            const item = document.createElement('li');
+            item.textContent = `${msg.username}: ${msg.message}`;
+            chat.appendChild(item);
+        };
+
+        messageForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const message = {
+                username: usernameInput.value,
+                message: messageInput.value
+            };
+            ws.send(JSON.stringify(message));
+            messageInput.value = '';
+        });
+    </script>
+</body>
+</html>
