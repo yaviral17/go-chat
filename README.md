@@ -5,4 +5,4 @@
 - Run the server by **`go run main.go`** command
 - Use **`http://localhost:8080/ws`** url to interact with server by using postman or by running the **`public/index.html`** file 
 
-### Feel free to add tickle the code 💚
+### Feel free to tickle the code 💚
